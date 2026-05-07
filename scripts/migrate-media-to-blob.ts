@@ -1,19 +1,6 @@
-// Facts:
-// 1. One-off CLI: `pnpm tsx scripts/migrate-media-to-blob.ts` (also wired as
-//    `pnpm migrate:media` in package.json). Not imported by any source file.
-// 2. Glob: scripts/migrate-media-to-blob.ts returned No files found before write.
-// 3. Reads + writes MongoDB via Payload Local API. Iterates `media` docs
-//    { id, filename, mimeType, url, filesize }, reads bytes from local
-//    media/<filename>, calls payload.update({ file: { data, name, mimetype, size } }) —
-//    Payload re-saves through the configured storage adapter (Vercel Blob when
-//    BLOB_READ_WRITE_TOKEN is set) and updates each doc's `url` to the Blob URL.
-//    Doc IDs are preserved so existing relationships stay valid.
-// 4. User: "so the process is ill give you the blob storage env token or
-//    something then youll run the script to migrate the media to vercel?"
-
 import 'dotenv/config'
 import path from 'node:path'
-import { readFile, stat } from 'node:fs/promises'
+import { readFile, readdir, stat } from 'node:fs/promises'
 import { getPayload } from 'payload'
 
 import config from '../src/payload.config'
@@ -27,23 +14,49 @@ interface MediaDoc {
 }
 
 const PAGE_SIZE = 100
-const MEDIA_DIR = path.resolve(process.cwd(), 'media')
 
-function isAlreadyOnBlob(url: string | null | undefined): boolean {
+function isAlreadyOnR2(url: string | null | undefined): boolean {
   if (!url) return false
-  return /\.public\.blob\.vercel-storage\.com/i.test(url)
+  const publicUrl = process.env.S3_PUBLIC_URL || ''
+  return publicUrl.length > 0 && url.startsWith(publicUrl)
+}
+
+async function buildFileIndex(dir: string): Promise<Map<string, string>> {
+  const index = new Map<string, string>()
+  async function walk(current: string) {
+    const entries = await readdir(current, { withFileTypes: true })
+    await Promise.all(
+      entries.map(async (entry) => {
+        const full = path.join(current, entry.name)
+        if (entry.isDirectory()) {
+          await walk(full)
+        } else {
+          index.set(entry.name.toLowerCase(), full)
+        }
+      }),
+    )
+  }
+  await walk(dir)
+  return index
 }
 
 async function main() {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    console.error(
-      '[migrate:media] BLOB_READ_WRITE_TOKEN is not set. Run `vercel env pull .env.local` or paste the token into .env before running this script.',
-    )
+  if (!process.env.S3_ACCESS_KEY) {
+    console.error('[migrate:media] S3_ACCESS_KEY is not set in .env')
     process.exit(1)
   }
 
+  const wpUploadsPath = process.env.WP_UPLOADS_PATH
+  if (!wpUploadsPath) {
+    console.error('[migrate:media] WP_UPLOADS_PATH is not set in .env')
+    process.exit(1)
+  }
+
+  console.log(`[migrate:media] indexing files in ${wpUploadsPath} ...`)
+  const fileIndex = await buildFileIndex(wpUploadsPath)
+  console.log(`[migrate:media] indexed ${fileIndex.size} files`)
+
   const payload = await getPayload({ config })
-  console.log(`[migrate:media] reading local files from ${MEDIA_DIR}`)
 
   let page = 1
   let totalProcessed = 0
@@ -72,44 +85,53 @@ async function main() {
         continue
       }
 
-      if (isAlreadyOnBlob(doc.url)) {
-        console.log(`[migrate:media] skip ${doc.filename}: already on Blob`)
+      if (isAlreadyOnR2(doc.url)) {
+        console.log(`[migrate:media] skip ${doc.filename}: already on R2`)
         totalSkipped += 1
         continue
       }
 
-      const filePath = path.join(MEDIA_DIR, doc.filename)
+      // Payload may have appended `-1` during the previous migration run.
+      // Try the exact name first, then strip a trailing `-N` numeric suffix.
+      const strippedFilename = doc.filename.replace(/-\d+(\.[^.]+)$/, '$1')
+      const resolvedPath =
+        fileIndex.get(doc.filename.toLowerCase()) ??
+        fileIndex.get(strippedFilename.toLowerCase())
+      const resolvedFilename = resolvedPath
+        ? path.basename(resolvedPath)
+        : doc.filename
+
+      if (!resolvedPath) {
+        console.warn(`[migrate:media] missing ${doc.filename}: not found in uploads`)
+        totalMissing += 1
+        continue
+      }
+
       try {
-        const info = await stat(filePath)
+        const info = await stat(resolvedPath)
         if (!info.isFile()) {
           console.warn(`[migrate:media] missing ${doc.filename}: not a file`)
           totalMissing += 1
           continue
         }
-        const data = await readFile(filePath)
+        const data = await readFile(resolvedPath)
 
         await payload.update({
           collection: 'media',
           id: doc.id,
           file: {
             data,
-            name: doc.filename,
+            name: resolvedFilename,
             mimetype: doc.mimeType ?? 'application/octet-stream',
             size: doc.filesize ?? data.length,
           },
         })
 
         totalUploaded += 1
-        console.log(`[migrate:media] ✓ ${doc.filename} (${data.length} bytes)`)
+        console.log(`[migrate:media] ✓ ${resolvedFilename} (${data.length} bytes)`)
       } catch (err: unknown) {
-        const code = (err as NodeJS.ErrnoException)?.code
-        if (code === 'ENOENT') {
-          console.warn(`[migrate:media] missing ${doc.filename}: not in ${MEDIA_DIR}`)
-          totalMissing += 1
-        } else {
-          console.error(`[migrate:media] error ${doc.filename}:`, err)
-          totalErrored += 1
-        }
+        console.error(`[migrate:media] error ${doc.filename}:`, err)
+        totalErrored += 1
       }
     }
 

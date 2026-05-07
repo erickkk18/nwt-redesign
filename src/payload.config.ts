@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url'
 
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
@@ -53,17 +53,26 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  // Storage: when BLOB_READ_WRITE_TOKEN is set (production on Vercel), uploads
-  // to the `media` collection are written to Vercel Blob and `media.url` is
-  // populated with the Blob URL. Without the token (local dev), uploads stay
-  // on the local filesystem under `media/` and the adapter is a no-op.
   plugins: [
-    vercelBlobStorage({
-      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+    s3Storage({
+      enabled: Boolean(process.env.S3_ACCESS_KEY),
       collections: {
-        media: true,
+        media: {
+          disablePayloadAccessControl: true,
+          generateFileURL: ({ filename }) =>
+            `${process.env.S3_PUBLIC_URL || ''}/${filename}`,
+        },
       },
-      token: process.env.BLOB_READ_WRITE_TOKEN || '',
+      bucket: process.env.S3_BUCKET || '',
+      config: {
+        endpoint: process.env.S3_ENDPOINT || '',
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY || '',
+          secretAccessKey: process.env.S3_SECRET_KEY || '',
+        },
+        region: 'auto',
+        forcePathStyle: false,
+      },
     }),
   ],
   sharp,
