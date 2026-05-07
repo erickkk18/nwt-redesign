@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NWT Law — Client focused. Creative solutions.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Brand — derived from NWT logo */
+    --teal-900: #0a2a26;   /* deepest navy-teal (wordmark) */
+    --teal-800: #14463f;   /* dark teal pillar */
+    --teal-700: #1d5a51;   /* mid teal pillar */
+    --teal-600: #2c7d6e;   /* sage-teal pillar */
+    --teal-100: #b9d4cd;
+    --teal-50:  #e8f0ed;
+
+    /* Emerald — vibrant green pillar */
+    --emerald-700: #1a7a4e;
+    --emerald-600: #2a9e64;
+    --emerald-300: #7fc9a3;
+
+    --ink: #0a2a26;
+    --ink-2: #1f3a36;
+    --ink-3: #4f615e;
+    --ink-4: #8a948f;
+
+    --cream: #f5f1e8;
+    --cream-2: #ebe5d6;
+    --paper: #faf8f2;
+    --line: #e0dccf;
+    --line-2: #cfc9b8;
+
+    --accent: #2a9e64; /* emerald accent (matches logo green) */
+
+    --serif: 'Newsreader', 'Times New Roman', serif;
+    --sans:  'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono:  'Geist Mono', ui-monospace, monospace;
+
+    --max: 1320px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  ::selection { background: var(--teal-800); color: var(--cream); }
+
+  /* Typography utilities */
+  .display { font-family: var(--serif); font-weight: 400; letter-spacing: -0.025em; line-height: 0.98; }
+  .display-italic { font-family: var(--serif); font-style: italic; font-weight: 300; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .body-lg { font-size: 19px; line-height: 1.55; color: var(--ink-2); }
+  .body { font-size: 16px; line-height: 1.6; color: var(--ink-2); }
+  .body-sm { font-size: 14px; line-height: 1.55; color: var(--ink-3); }
+
+  /* Container */
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
+  .container-wide { max-width: 1480px; margin: 0 auto; padding: 0 32px; }
+  .container-narrow { max-width: 980px; margin: 0 auto; padding: 0 32px; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--sans); font-size: 14px; font-weight: 500;
+    padding: 14px 22px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    letter-spacing: 0.005em;
+  }
+  .btn-primary {
+    background: var(--teal-800); color: var(--cream);
+  }
+  .btn-primary:hover { background: var(--teal-900); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent; color: var(--ink); border-color: var(--line-2);
+  }
+  .btn-ghost:hover { border-color: var(--ink); }
+  .btn-light {
+    background: var(--cream); color: var(--ink);
+  }
+  .btn-light:hover { background: white; }
+
+  /* Reveal animation */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s cubic-bezier(.2,.7,.2,1), transform 0.9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal-stagger > * { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal-stagger.in > * { opacity: 1; transform: none; }
+  .reveal-stagger.in > *:nth-child(1) { transition-delay: 0.05s; }
+  .reveal-stagger.in > *:nth-child(2) { transition-delay: 0.12s; }
+  .reveal-stagger.in > *:nth-child(3) { transition-delay: 0.19s; }
+  .reveal-stagger.in > *:nth-child(4) { transition-delay: 0.26s; }
+  .reveal-stagger.in > *:nth-child(5) { transition-delay: 0.33s; }
+  .reveal-stagger.in > *:nth-child(6) { transition-delay: 0.40s; }
+  .reveal-stagger.in > *:nth-child(7) { transition-delay: 0.47s; }
+  .reveal-stagger.in > *:nth-child(8) { transition-delay: 0.54s; }
+  .reveal-stagger.in > *:nth-child(9) { transition-delay: 0.61s; }
+  .reveal-stagger.in > *:nth-child(10) { transition-delay: 0.68s; }
+  .reveal-stagger.in > *:nth-child(11) { transition-delay: 0.75s; }
+  .reveal-stagger.in > *:nth-child(12) { transition-delay: 0.82s; }
+
+  /* Underline link */
+  .ulink {
+    position: relative; color: inherit; text-decoration: none;
+    border-bottom: 1px solid currentColor; padding-bottom: 2px;
+    transition: opacity 0.2s;
+  }
+  .ulink:hover { opacity: 0.65; }
+
+  /* Scrollbar (subtle) */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 999px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="src/utils.jsx"></script>
+<script type="text/babel" src="src/Nav.jsx"></script>
+<script type="text/babel" src="src/Hero.jsx"></script>
+<script type="text/babel" src="src/Protect.jsx"></script>
+<script type="text/babel" src="src/Industries.jsx"></script>
+<script type="text/babel" src="src/Approach.jsx"></script>
+<script type="text/babel" src="src/Practices.jsx"></script>
+<script type="text/babel" src="src/Stats.jsx"></script>
+<script type="text/babel" src="src/Attorneys.jsx"></script>
+<script type="text/babel" src="src/Testimonial.jsx"></script>
+<script type="text/babel" src="src/News.jsx"></script>
+<script type="text/babel" src="src/FAQ.jsx"></script>
+<script type="text/babel" src="src/Awards.jsx"></script>
+<script type="text/babel" src="src/Contact.jsx"></script>
+<script type="text/babel" src="src/Footer.jsx"></script>
+<script type="text/babel" src="src/App.jsx"></script>
+</body>
+</html>

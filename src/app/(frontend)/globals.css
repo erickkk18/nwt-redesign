@@ -1,0 +1,334 @@
+/* Facts:
+ * 1. Imported by src/app/(frontend)/layout.tsx; applied globally to (frontend)
+ *    route group pages starting with src/app/(frontend)/page.tsx.
+ * 2. Glob: src/app/**\/globals.css returned No files found.
+ * 3. Pure CSS — no data I/O.
+ * 4. User: "for the front end lets redesign it instead for the homepage ...
+ *    Use the existing images and logo. For the text/copies dont change it and
+ *    use the original. we were only changing the layout."
+ *
+ * Design tokens copied verbatim from the design source's <style> block.
+ */
+
+:root {
+  /* Brand — derived from NWT logo */
+  --teal-900: #0a2a26;
+  --teal-800: #14463f;
+  --teal-700: #1d5a51;
+  --teal-600: #2c7d6e;
+  --teal-100: #b9d4cd;
+  --teal-50: #e8f0ed;
+
+  --emerald-700: #1a7a4e;
+  --emerald-600: #2a9e64;
+  --emerald-300: #7fc9a3;
+
+  --ink: #0a2a26;
+  --ink-2: #1f3a36;
+  --ink-3: #4f615e;
+  --ink-4: #8a948f;
+
+  --cream: #f5f1e8;
+  --cream-2: #ebe5d6;
+  --paper: #faf8f2;
+  --line: #e0dccf;
+  --line-2: #cfc9b8;
+
+  --accent: #2a9e64;
+
+  --serif: 'Newsreader', 'Times New Roman', serif;
+  --sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, monospace;
+
+  --max: 1320px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background: var(--teal-800);
+  color: var(--cream);
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Typography */
+.display {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+}
+.display-italic {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.body-lg {
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.body {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.body-sm {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+/* Containers */
+.container {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.container-wide {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.container-narrow {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px 22px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  letter-spacing: 0.005em;
+}
+.btn-primary {
+  background: var(--teal-800);
+  color: var(--cream);
+}
+.btn-primary:hover {
+  background: var(--teal-900);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line-2);
+}
+.btn-ghost:hover {
+  border-color: var(--ink);
+}
+.btn-light {
+  background: var(--cream);
+  color: var(--ink);
+}
+.btn-light:hover {
+  background: white;
+}
+
+/* Reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Underline link */
+.ulink {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  transition: opacity 0.2s;
+}
+.ulink:hover {
+  opacity: 0.65;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes scrollHint {
+  0%,
+  100% {
+    transform: scaleY(1);
+    transform-origin: top;
+    opacity: 0.7;
+  }
+  50% {
+    transform: scaleY(0.4);
+    opacity: 0.3;
+  }
+}
+
+/* Burger button — hidden on desktop, shown on tablet/mobile. */
+.nav-burger {
+  display: none;
+}
+.nav-drawer {
+  display: none;
+}
+
+/* Responsive helpers — collapse editorial grids on narrow screens. */
+@media (max-width: 960px) {
+  .grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 56px !important;
+  }
+  .grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
+  }
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+  .grid-5 {
+    grid-template-columns: 1fr !important;
+  }
+  .industries-row {
+    grid-template-columns: 60px 1fr !important;
+    gap: 16px !important;
+  }
+  .industries-row > .industries-desc,
+  .industries-row > .industries-arrow {
+    grid-column: 2 !important;
+  }
+  .nav-links {
+    display: none !important;
+  }
+  .nav-burger {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-drawer {
+    display: flex !important;
+  }
+
+  /* Footer collapses to single column on tablet/mobile. */
+  .footer-top,
+  .footer-mid {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+
+  /* Team detail: drop the sticky aside, stack instead. */
+  .team-detail-grid {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
+  }
+  .team-detail-grid > div[style*="position: sticky"],
+  .team-detail-grid > div[style*="position:sticky"] {
+    position: static !important;
+  }
+
+  /* Belt-and-suspenders: any inline grid using these patterns collapses. */
+  [style*="grid-template-columns: 7fr"],
+  [style*="grid-template-columns: 5fr"],
+  [style*="grid-template-columns: 1.1fr"],
+  [style*="grid-template-columns: 1.2fr"],
+  [style*="grid-template-columns: 1.3fr"],
+  [style*="grid-template-columns: 1.6fr"],
+  [style*="grid-template-columns: repeat(3"],
+  [style*="grid-template-columns: repeat(4"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Phones: slim everything down. */
+@media (max-width: 600px) {
+  .container,
+  .container-wide,
+  .container-narrow {
+    padding: 0 20px;
+  }
+  .grid-4 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Reduce monumental section paddings on small screens. */
+  main > section {
+    padding-top: clamp(64px, 18vw, 120px) !important;
+    padding-bottom: clamp(64px, 18vw, 120px) !important;
+  }
+
+  /* Keep cards/images from forcing horizontal scroll. */
+  img,
+  svg,
+  iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Awards card: tighten internal padding so it fits a phone. */
+  main section [style*="padding: 48px 48px 0"] {
+    padding: 32px 24px 0 !important;
+  }
+}

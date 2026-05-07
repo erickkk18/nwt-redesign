@@ -1,0 +1,14 @@
+/* Facts:
+ * 1. Imported by src/app/(payload)/layout.tsx after @payloadcms/next/css.
+ * 2. Glob: src/app/(payload)/custom.scss returned No files found.
+ * 3. No data I/O. Overrides Payload admin CSS variables for NWT brand.
+ * 4. User: "proceed" — Phase 4 routing.
+ */
+
+@layer payload-default {
+  :root {
+    --color-base-0: #faf8f2;
+    --color-base-50: #f5f1e8;
+    --color-success-500: #2a9e64;
+  }
+}
