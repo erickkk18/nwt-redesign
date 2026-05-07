@@ -9,6 +9,7 @@
 
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 
 import {
@@ -86,19 +87,23 @@ function NewsCard({ cat, title, href, imageUrl, imageAlt }: Omit<NewsView, 'key'
     <a href={href} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ display: 'block', textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
       <div style={{ overflow: 'hidden', marginBottom: 24 }}>
         {imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={imageUrl}
-            alt={imageAlt ?? title}
+          <div
             style={{
+              position: 'relative',
               width: '100%',
               aspectRatio: '3/2',
-              objectFit: 'cover',
               transition: 'transform 0.7s cubic-bezier(.2,.7,.2,1)',
               transform: hovered ? 'scale(1.05)' : 'scale(1)',
-              display: 'block',
             }}
-          />
+          >
+            <Image
+              src={imageUrl}
+              alt={imageAlt ?? title}
+              fill
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              style={{ objectFit: 'cover' }}
+            />
+          </div>
         ) : (
           <Placeholder label={cat} ratio="3/2" tone="cream" style={{ transition: 'transform 0.7s cubic-bezier(.2,.7,.2,1)', transform: hovered ? 'scale(1.05)' : 'scale(1)' }} />
         )}

@@ -47,6 +47,12 @@ interface PageDoc {
     metaTitle?: string | null
     metaDescription?: string | null
   } | null
+  sectionContent?: {
+    about?: AboutPageContent | null
+    contact?: ContactPageContent | null
+    team?: TeamPageContent | null
+    services?: ServicesPageContent | null
+  } | null
   publishedAt?: string | null
 }
 
@@ -175,7 +181,9 @@ export default async function PageRoute({
     slug === 'thank-you-contact' || slug === 'thank-you-get-in-touch'
 
   if (isAbout) {
-    const about = await loadGlobal<AboutPageContent>('about-page')
+    const about =
+      page.sectionContent?.about ??
+      (await loadGlobal<AboutPageContent>('about-page'))
     return <AboutPage content={about} />
   }
 
@@ -184,19 +192,23 @@ export default async function PageRoute({
   const heroHeading = page.hero?.heading ?? page.title
   const heroSubheading = page.hero?.subheading ?? undefined
 
+  const sectionContact = page.sectionContent?.contact ?? null
+  const sectionTeam = page.sectionContent?.team ?? null
+  const sectionServices = page.sectionContent?.services ?? null
+
   const [team, services, contactGlobal, teamGlobal, servicesGlobal] =
     await Promise.all([
       isTeam ? loadTeam() : Promise.resolve<TeamMember[]>([]),
       isServices ? loadServices() : Promise.resolve<Service[]>([]),
-      isContact
+      isContact && !sectionContact
         ? loadGlobal<ContactPageContent>('contact-page')
-        : Promise.resolve<ContactPageContent | null>(null),
-      isTeam
+        : Promise.resolve<ContactPageContent | null>(sectionContact),
+      isTeam && !sectionTeam
         ? loadGlobal<TeamPageContent>('team-page')
-        : Promise.resolve<TeamPageContent | null>(null),
-      isServices
+        : Promise.resolve<TeamPageContent | null>(sectionTeam),
+      isServices && !sectionServices
         ? loadGlobal<ServicesPageContent>('services-page')
-        : Promise.resolve<ServicesPageContent | null>(null),
+        : Promise.resolve<ServicesPageContent | null>(sectionServices),
     ])
 
   return (

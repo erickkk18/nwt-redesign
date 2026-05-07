@@ -18,6 +18,7 @@ import config from '@payload-config'
 
 import { RichText } from '@/components/RichText'
 import { ContactBand } from '@/components/sections/ContactBand'
+import { HeroTheme } from '@/components/site/HeroTheme'
 
 interface MediaDoc {
   url?: string | null
@@ -132,6 +133,7 @@ export default async function ServiceDetailPage({
 
   return (
     <main style={{ background: 'var(--paper)', minHeight: '100vh' }}>
+      <HeroTheme value="dark" />
       {/* Editorial dark hero */}
       <section
         style={{

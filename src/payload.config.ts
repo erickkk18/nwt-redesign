@@ -20,10 +20,9 @@ import { SiteSettings } from './globals/SiteSettings'
 import { HeaderMenu } from './globals/HeaderMenu'
 import { FooterMenu } from './globals/FooterMenu'
 import { HomePage } from './globals/HomePage'
-import { AboutPage } from './globals/AboutPage'
-import { ContactPage } from './globals/ContactPage'
-import { TeamPage } from './globals/TeamPage'
-import { ServicesPage } from './globals/ServicesPage'
+// AboutPage / ContactPage / TeamPage / ServicesPage globals were folded into
+// the Pages collection's `sectionContent` group. Run
+// `pnpm tsx scripts/migrate-globals-to-pages.ts` once before relying on this.
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -53,10 +52,6 @@ export default buildConfig({
     HeaderMenu,
     FooterMenu,
     HomePage,
-    AboutPage,
-    ContactPage,
-    TeamPage,
-    ServicesPage,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

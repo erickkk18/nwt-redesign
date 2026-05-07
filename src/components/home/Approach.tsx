@@ -7,6 +7,8 @@
 
 'use client'
 
+import Image from 'next/image'
+
 import { Icon, Placeholder, mediaAlt, mediaUrl, s, useReveal, type ApproachContent, type PillarContent } from './_shared'
 
 const fallbackPillars: PillarContent[] = [
@@ -42,12 +44,15 @@ export function Approach({ content }: { content?: ApproachContent | null }) {
             </h2>
             <div style={{ position: 'relative', marginBottom: 32 }}>
               {imageUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={imageUrl}
-                  alt={imageAlt}
-                  style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }}
-                />
+                <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3' }}>
+                  <Image
+                    src={imageUrl}
+                    alt={imageAlt}
+                    fill
+                    sizes="(min-width: 960px) 50vw, 100vw"
+                    style={{ objectFit: 'cover' }}
+                  />
+                </div>
               ) : (
                 <Placeholder label="Workspace" ratio="4/3" tone="cream" />
               )}

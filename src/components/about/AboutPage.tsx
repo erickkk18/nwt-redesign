@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { CSSProperties } from 'react'
 
 import { HeroTheme } from '@/components/site/HeroTheme'
@@ -171,11 +172,14 @@ function AboutHero({ content }: { content?: AboutHeroContent | null }) {
             }}
           >
             {imgUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={imgUrl}
                 alt={imgAlt}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                fill
+                priority
+                fetchPriority="high"
+                sizes="(min-width: 960px) 40vw, 100vw"
+                style={{ objectFit: 'cover' }}
               />
             ) : (
               <div

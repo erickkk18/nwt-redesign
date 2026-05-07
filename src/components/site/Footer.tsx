@@ -5,6 +5,8 @@
 // 4. User: "make more fields for the footer. … the images are for reference
 //    still follow the design rules"
 
+import Image from 'next/image'
+
 interface FooterLink {
   label: string
   href: string
@@ -213,10 +215,11 @@ export function Footer({
           }}
         >
           <div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={logoUrl}
               alt={logoAlt}
+              width={224}
+              height={112}
               style={{
                 height: 56,
                 width: 'auto',

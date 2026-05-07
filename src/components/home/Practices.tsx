@@ -11,6 +11,7 @@
 
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 
 import {
@@ -87,19 +88,23 @@ function PracticeCell({ label, tag, desc, imageUrl, imageAlt, isLast }: Practice
     >
       <div style={{ marginBottom: 20, overflow: 'hidden' }}>
         {imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={imageUrl}
-            alt={imageAlt ?? tag}
+          <div
             style={{
+              position: 'relative',
               width: '100%',
               aspectRatio: '4/3',
-              objectFit: 'cover',
               transition: 'transform 0.6s ease',
               transform: hovered ? 'scale(1.03)' : 'scale(1)',
-              display: 'block',
             }}
-          />
+          >
+            <Image
+              src={imageUrl}
+              alt={imageAlt ?? tag}
+              fill
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+              style={{ objectFit: 'cover' }}
+            />
+          </div>
         ) : (
           <Placeholder label={tag} ratio="4/3" tone="dark" style={{ transition: 'transform 0.6s ease', transform: hovered ? 'scale(1.03)' : 'scale(1)' }} />
         )}

@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 import { HeroTheme } from '@/components/site/HeroTheme'
 
 interface PageHeroProps {
@@ -42,18 +44,14 @@ export function PageHero({
     >
       <HeroTheme value={isDark ? 'dark' : 'light'} />
       {imageUrl && isDark && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={imageUrl}
           alt={imageAlt ?? title}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: 0.32,
-          }}
+          fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
+          style={{ objectFit: 'cover', opacity: 0.32 }}
         />
       )}
 

@@ -7,6 +7,9 @@
 
 'use client'
 
+import Image from 'next/image'
+
+import { HeroTheme } from '@/components/site/HeroTheme'
 import { Icon, mediaAlt, mediaUrl, s, useScrollY, type HeroContent } from './_shared'
 
 export function Hero({ content }: { content?: HeroContent | null }) {
@@ -38,6 +41,7 @@ export function Hero({ content }: { content?: HeroContent | null }) {
         background: 'var(--teal-900)',
       }}
     >
+      <HeroTheme value="dark" />
       <div
         style={{
           position: 'absolute',
@@ -47,18 +51,14 @@ export function Hero({ content }: { content?: HeroContent | null }) {
         }}
       >
         {bgUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={bgUrl}
             alt={bgAlt}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              opacity: 0.32,
-            }}
+            fill
+            priority
+            fetchPriority="high"
+            sizes="100vw"
+            style={{ objectFit: 'cover', opacity: 0.32 }}
           />
         ) : (
           <SkylineArt />

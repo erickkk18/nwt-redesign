@@ -36,9 +36,9 @@
 
   --accent: #2a9e64;
 
-  --serif: 'Newsreader', 'Times New Roman', serif;
-  --sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  --mono: 'Geist Mono', ui-monospace, monospace;
+  --serif: var(--font-newsreader), 'Newsreader', 'Times New Roman', serif;
+  --sans: var(--font-geist), 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace;
 
   --max: 1320px;
 }

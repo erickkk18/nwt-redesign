@@ -13,6 +13,7 @@
     "payload": "payload",
     "migrate": "tsx scripts/migrate.ts",
     "migrate:media": "tsx scripts/migrate-media-to-blob.ts",
+    "migrate:globals": "tsx scripts/migrate-globals-to-pages.ts",
     "create-admin": "tsx scripts/create-admin.ts"
   },
   "dependencies": {

@@ -46,11 +46,17 @@ export const Media: CollectionConfig = {
   ],
   upload: {
     staticDir: path.resolve(dirname, '../../media'),
+    formatOptions: {
+      format: 'webp',
+      options: { quality: 82 },
+    },
     imageSizes: [
-      { name: 'thumbnail', width: 400, height: 300, position: 'centre' },
-      { name: 'card', width: 768, height: 512, position: 'centre' },
-      { name: 'tablet', width: 1024 },
-      { name: 'feature', width: 1920 },
+      { name: 'xs', width: 240, formatOptions: { format: 'webp', options: { quality: 78 } } },
+      { name: 'mobile', width: 480, formatOptions: { format: 'webp', options: { quality: 80 } } },
+      { name: 'thumbnail', width: 400, height: 300, position: 'centre', formatOptions: { format: 'webp', options: { quality: 82 } } },
+      { name: 'card', width: 768, height: 512, position: 'centre', formatOptions: { format: 'webp', options: { quality: 82 } } },
+      { name: 'tablet', width: 1024, formatOptions: { format: 'webp', options: { quality: 82 } } },
+      { name: 'feature', width: 1920, formatOptions: { format: 'webp', options: { quality: 82 } } },
     ],
     mimeTypes: [
       'image/*',

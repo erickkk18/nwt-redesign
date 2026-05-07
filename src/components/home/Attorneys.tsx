@@ -12,6 +12,7 @@
 
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 
 import {
@@ -108,11 +109,12 @@ function AttorneyCard({ slug, name, role, city, tag, photoUrl, photoAlt }: Omit<
       <div style={{ position: 'relative', overflow: 'hidden', marginBottom: 18, background: 'var(--cream-2)' }}>
         <div style={{ aspectRatio: '4/5', background: photoUrl ? 'var(--cream-2)' : 'repeating-linear-gradient(135deg, #cdb89a 0 14px, #c3ae90 14px 28px)', transition: 'transform 0.6s cubic-bezier(.2,.7,.2,1)', transform: hovered ? 'scale(1.04)' : 'scale(1)', position: 'relative' }}>
           {photoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={photoUrl}
               alt={photoAlt ?? name}
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              fill
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+              style={{ objectFit: 'cover' }}
             />
           ) : (
             <svg viewBox="0 0 200 250" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>

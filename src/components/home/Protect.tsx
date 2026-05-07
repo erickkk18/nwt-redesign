@@ -12,6 +12,8 @@
 
 'use client'
 
+import Image from 'next/image'
+
 import { Placeholder, mediaAlt, mediaUrl, s, useReveal, type ProtectContent } from './_shared'
 
 export function Protect({ content }: { content?: ProtectContent | null }) {
@@ -77,12 +79,15 @@ export function Protect({ content }: { content?: ProtectContent | null }) {
           </div>
           <div style={{ position: 'relative' }}>
             {image1Url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={image1Url}
-                alt={image1Alt}
-                style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }}
-              />
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3' }}>
+                <Image
+                  src={image1Url}
+                  alt={image1Alt}
+                  fill
+                  sizes="(min-width: 960px) 50vw, 100vw"
+                  style={{ objectFit: 'cover' }}
+                />
+              </div>
             ) : (
               <Placeholder label="Attorney with client" ratio="4/3" tone="cream" />
             )}
@@ -96,12 +101,15 @@ export function Protect({ content }: { content?: ProtectContent | null }) {
         <div ref={ref3} className="reveal grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 100, alignItems: 'center' }}>
           <div style={{ position: 'relative' }}>
             {image2Url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={image2Url}
-                alt={image2Alt}
-                style={{ width: '100%', aspectRatio: '5/4', objectFit: 'cover', display: 'block' }}
-              />
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '5/4' }}>
+                <Image
+                  src={image2Url}
+                  alt={image2Alt}
+                  fill
+                  sizes="(min-width: 960px) 50vw, 100vw"
+                  style={{ objectFit: 'cover' }}
+                />
+              </div>
             ) : (
               <Placeholder label="Modern desk — laptop & docs" ratio="5/4" tone="cream" />
             )}

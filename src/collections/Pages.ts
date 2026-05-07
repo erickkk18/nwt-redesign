@@ -24,6 +24,18 @@ import { ServicesBlock } from '../blocks/ServicesBlock'
 import { GalleryBlock } from '../blocks/GalleryBlock'
 import { FormBlock } from '../blocks/FormBlock'
 
+const ABOUT_SLUGS = ['what-sets-us-apart', 'about', 'about-us']
+const CONTACT_SLUGS = ['contact-us', 'thank-you-contact', 'thank-you-get-in-touch']
+const TEAM_SLUGS = ['our-team', 'team']
+const SERVICES_SLUGS = ['our-services', 'what-we-do', 'services', 'practices']
+
+const showFor =
+  (slugs: readonly string[]) =>
+  ({ siblingData, data }: { siblingData?: { slug?: string | null }; data?: { slug?: string | null } }) => {
+    const slug = siblingData?.slug ?? data?.slug
+    return typeof slug === 'string' && slugs.includes(slug)
+  }
+
 export const Pages: CollectionConfig = {
   slug: 'pages',
   admin: {
@@ -115,6 +127,254 @@ export const Pages: CollectionConfig = {
           name: 'metaImage',
           type: 'upload',
           relationTo: 'media',
+        },
+      ],
+    },
+    {
+      name: 'sectionContent',
+      type: 'group',
+      label: 'Section Content',
+      admin: {
+        description:
+          'Section-by-section content for known landing pages (about / contact / team / services). The relevant group appears automatically based on the page slug.',
+      },
+      fields: [
+        {
+          name: 'about',
+          type: 'group',
+          label: 'About sections',
+          admin: { condition: showFor(ABOUT_SLUGS) },
+          fields: [
+            {
+              name: 'hero',
+              type: 'group',
+              label: '01 · Hero',
+              fields: [
+                { name: 'eyebrowNumber', type: 'text', defaultValue: '02' },
+                { name: 'eyebrowText', type: 'text', defaultValue: 'What We Do' },
+                { name: 'headline', type: 'text', defaultValue: 'All the Experience of a' },
+                {
+                  name: 'headlineItalic',
+                  type: 'text',
+                  defaultValue: 'Big Law Firm Without the Waste.',
+                },
+                { name: 'lede', type: 'textarea' },
+                {
+                  name: 'image',
+                  type: 'upload',
+                  relationTo: 'media',
+                  admin: { description: 'Optional. Right-side hero image (4:5 portrait works best).' },
+                },
+              ],
+            },
+            {
+              name: 'pillars',
+              type: 'group',
+              label: '02 · Differentiators',
+              fields: [
+                { name: 'eyebrowNumber', type: 'text', defaultValue: '03' },
+                { name: 'eyebrowText', type: 'text', defaultValue: 'How We Work' },
+                { name: 'heading', type: 'text', defaultValue: 'Personable.' },
+                { name: 'headingItalic', type: 'text', defaultValue: 'Creative. Efficient.' },
+                {
+                  name: 'items',
+                  type: 'array',
+                  minRows: 1,
+                  maxRows: 6,
+                  fields: [
+                    { name: 'numLabel', type: 'text' },
+                    { name: 'title', type: 'text' },
+                    { name: 'body', type: 'textarea' },
+                  ],
+                },
+              ],
+            },
+            {
+              name: 'licenses',
+              type: 'group',
+              label: '03 · Licenses',
+              fields: [
+                { name: 'eyebrowNumber', type: 'text', defaultValue: '04' },
+                { name: 'eyebrowText', type: 'text', defaultValue: 'State Bar Qualification' },
+                { name: 'heading', type: 'text', defaultValue: 'Our' },
+                { name: 'headingItalic', type: 'text', defaultValue: 'Licenses.' },
+                { name: 'disclaimer', type: 'textarea' },
+                {
+                  name: 'items',
+                  type: 'array',
+                  minRows: 1,
+                  maxRows: 6,
+                  fields: [
+                    { name: 'jurisdiction', type: 'text' },
+                    { name: 'body', type: 'textarea' },
+                  ],
+                },
+                {
+                  name: 'cta',
+                  type: 'group',
+                  fields: [
+                    { name: 'label', type: 'text', defaultValue: 'View Our Team' },
+                    { name: 'href', type: 'text', defaultValue: '/our-team' },
+                  ],
+                },
+              ],
+            },
+            {
+              name: 'cta',
+              type: 'group',
+              label: '04 · Closing CTA',
+              fields: [
+                { name: 'eyebrowText', type: 'text', defaultValue: 'Get in Touch' },
+                { name: 'headline', type: 'text', defaultValue: 'We bring proven experience' },
+                { name: 'headlineItalic', type: 'text', defaultValue: 'with personalized counsel.' },
+                { name: 'body', type: 'textarea' },
+                {
+                  name: 'primaryCta',
+                  type: 'group',
+                  fields: [
+                    { name: 'label', type: 'text', defaultValue: 'Contact Us' },
+                    { name: 'href', type: 'text', defaultValue: '/contact-us' },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: 'contact',
+          type: 'group',
+          label: 'Contact sections',
+          admin: { condition: showFor(CONTACT_SLUGS) },
+          fields: [
+            {
+              name: 'header',
+              type: 'group',
+              label: '01 · Header',
+              fields: [
+                { name: 'eyebrowNumber', type: 'text', defaultValue: '09' },
+                { name: 'eyebrowText', type: 'text', defaultValue: 'Contact' },
+                { name: 'heading', type: 'text', defaultValue: 'Tell us about' },
+                { name: 'headingItalic', type: 'text', defaultValue: 'your matter.' },
+                { name: 'lede', type: 'textarea' },
+              ],
+            },
+            {
+              name: 'details',
+              type: 'group',
+              label: '02 · Contact Details',
+              fields: [
+                { name: 'detailsHeading', type: 'text', defaultValue: 'Contact' },
+                { name: 'detailsHeadingItalic', type: 'text', defaultValue: 'Details.' },
+                {
+                  name: 'offices',
+                  type: 'array',
+                  minRows: 1,
+                  maxRows: 5,
+                  fields: [
+                    { name: 'label', type: 'text' },
+                    { name: 'addressLine1', type: 'text' },
+                    { name: 'addressLine2', type: 'text' },
+                    { name: 'phone', type: 'text' },
+                  ],
+                },
+                { name: 'sharedEmail', type: 'text' },
+                { name: 'hoursLabel', type: 'text', defaultValue: 'Hours' },
+                { name: 'hoursBody', type: 'textarea' },
+              ],
+            },
+            {
+              name: 'form',
+              type: 'group',
+              label: '03 · Form Copy',
+              fields: [
+                { name: 'submitLabel', type: 'text', defaultValue: 'Send Message' },
+                { name: 'disclaimer', type: 'textarea' },
+                { name: 'successEyebrow', type: 'text', defaultValue: 'Message received' },
+                { name: 'successHeading', type: 'text', defaultValue: 'Thank you' },
+                { name: 'successBody', type: 'textarea' },
+              ],
+            },
+          ],
+        },
+        {
+          name: 'team',
+          type: 'group',
+          label: 'Team list sections',
+          admin: { condition: showFor(TEAM_SLUGS) },
+          fields: [
+            {
+              name: 'intro',
+              type: 'group',
+              label: '01 · Intro',
+              fields: [
+                { name: 'eyebrowNumber', type: 'text', defaultValue: '06' },
+                { name: 'eyebrowText', type: 'text', defaultValue: 'Our Team' },
+                { name: 'heading', type: 'text', defaultValue: 'Founded By Veterans of' },
+                { name: 'headingItalic', type: 'text', defaultValue: 'Big Law Firms.' },
+                { name: 'description', type: 'textarea' },
+              ],
+            },
+            {
+              name: 'cta',
+              type: 'group',
+              label: '02 · Closing CTA',
+              fields: [
+                { name: 'enabled', type: 'checkbox', defaultValue: true },
+                { name: 'eyebrowText', type: 'text', defaultValue: 'Work with us' },
+                { name: 'heading', type: 'text', defaultValue: 'Looking for the right' },
+                { name: 'headingItalic', type: 'text', defaultValue: 'attorney?' },
+                { name: 'body', type: 'textarea' },
+                {
+                  name: 'primaryCta',
+                  type: 'group',
+                  fields: [
+                    { name: 'label', type: 'text', defaultValue: 'Get in Touch' },
+                    { name: 'href', type: 'text', defaultValue: '/contact-us' },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: 'services',
+          type: 'group',
+          label: 'Services list sections',
+          admin: { condition: showFor(SERVICES_SLUGS) },
+          fields: [
+            {
+              name: 'intro',
+              type: 'group',
+              label: '01 · Intro',
+              fields: [
+                { name: 'eyebrowNumber', type: 'text', defaultValue: '04' },
+                { name: 'eyebrowText', type: 'text', defaultValue: 'Excellence in Customer Service' },
+                { name: 'heading', type: 'text', defaultValue: 'Full-Service' },
+                { name: 'headingItalic', type: 'text', defaultValue: 'Law Firm.' },
+                { name: 'description', type: 'textarea' },
+              ],
+            },
+            {
+              name: 'cta',
+              type: 'group',
+              label: '02 · Closing CTA',
+              fields: [
+                { name: 'enabled', type: 'checkbox', defaultValue: true },
+                { name: 'eyebrowText', type: 'text', defaultValue: 'Why Our Firm' },
+                { name: 'heading', type: 'text', defaultValue: 'We provide the highest quality counsel' },
+                { name: 'headingItalic', type: 'text', defaultValue: 'for your business.' },
+                { name: 'body', type: 'textarea' },
+                {
+                  name: 'primaryCta',
+                  type: 'group',
+                  fields: [
+                    { name: 'label', type: 'text', defaultValue: 'Contact Us' },
+                    { name: 'href', type: 'text', defaultValue: '/contact-us' },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       ],
     },

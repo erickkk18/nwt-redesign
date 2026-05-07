@@ -7,6 +7,7 @@
 
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import type { CSSProperties } from 'react'
 
@@ -96,7 +97,7 @@ function ArrowIcon({ size = 14 }: { size?: number }) {
 }
 
 export function Nav({
-  initialTheme = 'dark',
+  initialTheme = 'light',
   links = DEFAULT_LINKS,
   cta = DEFAULT_CTA,
   logoUrl = '/nwt-logo.png',
@@ -195,10 +196,12 @@ export function Nav({
             textDecoration: 'none',
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={logoUrl}
             alt={logoAlt}
+            width={208}
+            height={104}
+            priority
             style={{
               height: scrolled ? 40 : 52,
               width: 'auto',
@@ -255,7 +258,8 @@ export function Nav({
             cursor: 'pointer',
             padding: 6,
             color: isLight || mobileOpen ? 'var(--ink)' : 'var(--cream)',
-            display: 'none',
+            position: 'relative',
+            zIndex: 102,
           }}
         >
           <BurgerIcon open={mobileOpen} />
@@ -271,10 +275,9 @@ export function Nav({
           position: 'fixed',
           inset: 0,
           background: 'var(--paper)',
-          zIndex: 99,
+          zIndex: 101,
           transform: mobileOpen ? 'translateY(0)' : 'translateY(-100%)',
           transition: 'transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1)',
-          display: 'flex',
           flexDirection: 'column',
           padding: '120px 24px 48px',
           overflowY: 'auto',
