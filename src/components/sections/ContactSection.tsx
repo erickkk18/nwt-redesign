@@ -1,13 +1,49 @@
-// Facts:
-// 1. Imported by [slug]/page.tsx for slug 'contact-us' (and similar).
-// 2. Glob: src/components/sections/ContactSection.tsx returned No files found.
-// 3. No I/O. Client component (form state).
-// 4. User: "wire up sections on the pages and create components".
-
 'use client'
 
 import { useState } from 'react'
 import type { CSSProperties, ChangeEvent, FormEvent } from 'react'
+
+interface OfficeContent {
+  label?: string | null
+  addressLine1?: string | null
+  addressLine2?: string | null
+  phone?: string | null
+}
+
+interface ContactHeaderContent {
+  eyebrowNumber?: string | null
+  eyebrowText?: string | null
+  heading?: string | null
+  headingItalic?: string | null
+  lede?: string | null
+}
+
+interface ContactDetailsContent {
+  detailsHeading?: string | null
+  detailsHeadingItalic?: string | null
+  offices?: OfficeContent[] | null
+  sharedEmail?: string | null
+  hoursLabel?: string | null
+  hoursBody?: string | null
+}
+
+interface ContactFormCopy {
+  submitLabel?: string | null
+  disclaimer?: string | null
+  successEyebrow?: string | null
+  successHeading?: string | null
+  successBody?: string | null
+}
+
+export interface ContactPageContent {
+  header?: ContactHeaderContent | null
+  details?: ContactDetailsContent | null
+  form?: ContactFormCopy | null
+}
+
+interface ContactSectionProps {
+  content?: ContactPageContent | null
+}
 
 interface FormState {
   name: string
@@ -23,6 +59,12 @@ const initialForm: FormState = {
   phone: '',
   firm: '',
   message: '',
+}
+
+function s(value: string | null | undefined, fallback: string): string {
+  if (typeof value !== 'string') return fallback
+  const trimmed = value.trim()
+  return trimmed.length > 0 ? value : fallback
 }
 
 function ArrowIcon({ size = 14 }: { size?: number }) {
@@ -67,7 +109,15 @@ const labelStyle: CSSProperties = {
   display: 'block',
 }
 
-export function ContactSection() {
+const eyebrowStyle: CSSProperties = {
+  fontFamily: 'var(--mono)',
+  fontSize: 11,
+  letterSpacing: '0.18em',
+  textTransform: 'uppercase',
+  color: 'var(--ink-3)',
+}
+
+export function ContactSection({ content }: ContactSectionProps = {}) {
   const [form, setForm] = useState<FormState>(initialForm)
   const [submitted, setSubmitted] = useState(false)
 
@@ -81,83 +131,169 @@ export function ContactSection() {
     setSubmitted(true)
   }
 
+  const eyebrowNumber = s(content?.header?.eyebrowNumber, '09')
+  const eyebrowText = s(content?.header?.eyebrowText, 'Contact')
+  const heading = s(content?.header?.heading, 'Tell us about')
+  const headingItalic = s(content?.header?.headingItalic, 'your matter.')
+  const lede = s(
+    content?.header?.lede,
+    'A short note is enough — share what you can, and a partner will respond within one business day. All inquiries are confidential.',
+  )
+
+  const detailsHeading = s(content?.details?.detailsHeading, 'Contact')
+  const detailsHeadingItalic = s(content?.details?.detailsHeadingItalic, 'Details.')
+  const offices =
+    content?.details?.offices && content.details.offices.length > 0
+      ? content.details.offices
+      : [
+          {
+            label: 'Houston Office',
+            addressLine1: '1717 West Loop South, Suite 1800',
+            addressLine2: 'Houston, Texas 77027',
+            phone: '+1 (713) 555-0140',
+          },
+        ]
+  const sharedEmail = s(content?.details?.sharedEmail, 'info@nwtlaw.example')
+  const hoursLabel = s(content?.details?.hoursLabel, 'Hours')
+  const hoursBody = s(content?.details?.hoursBody, 'Mon — Fri · 8:30 AM – 6:00 PM CT')
+
+  const submitLabel = s(content?.form?.submitLabel, 'Send Message')
+  const disclaimer = s(
+    content?.form?.disclaimer,
+    'Submitting this form does not create an attorney-client relationship. By contacting us, you acknowledge that we may not represent you until a formal engagement is established.',
+  )
+  const successEyebrow = s(content?.form?.successEyebrow, 'Message received')
+  const successHeading = s(content?.form?.successHeading, 'Thank you')
+  const successBody = s(
+    content?.form?.successBody,
+    "We've received your inquiry and will be in touch within one business day.",
+  )
+
   return (
     <section
       id="contact"
-      style={{ background: 'var(--paper)', padding: '120px 0' }}
+      style={{
+        background: 'var(--paper)',
+        padding: 'clamp(80px, 12vh, 140px) 0',
+        position: 'relative',
+      }}
     >
       <div className="container-wide">
         <div
+          className="contact-header"
           style={{
             marginBottom: 80,
-            display: 'flex',
-            alignItems: 'baseline',
-            justifyContent: 'space-between',
-            borderBottom: '1px solid var(--line)',
-            paddingBottom: 24,
-          }}
-        >
-          <div className="eyebrow">
-            <span style={{ color: 'var(--accent)', marginRight: 10 }}>09</span>{' '}
-            Contact
-          </div>
-        </div>
-
-        <div
-          className="grid-2"
-          style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 1.3fr',
-            gap: 100,
+            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 0.9fr)',
+            gap: 'clamp(32px, 5vw, 80px)',
+            alignItems: 'end',
+            paddingBottom: 32,
+            borderBottom: '1px solid var(--line)',
           }}
         >
           <div>
+            <div style={{ ...eyebrowStyle, marginBottom: 24 }}>
+              <span style={{ color: 'var(--accent)', marginRight: 10 }}>{eyebrowNumber}</span>
+              {eyebrowText}
+            </div>
             <h2
               className="display"
               style={{
-                fontSize: 'clamp(36px, 4vw, 56px)',
+                fontSize: 'clamp(40px, 5vw, 80px)',
+                lineHeight: 0.98,
+                letterSpacing: '-0.02em',
+                margin: 0,
                 color: 'var(--ink)',
-                marginBottom: 40,
               }}
             >
-              Contact{' '}
-              <span
-                className="display-italic"
-                style={{ color: 'var(--teal-800)' }}
-              >
-                Details.
+              {heading}{' '}
+              <span className="display-italic" style={{ color: 'var(--teal-800)' }}>
+                {headingItalic}
               </span>
             </h2>
+          </div>
+          <p
+            className="body-lg"
+            style={{
+              color: 'var(--ink-2)',
+              margin: 0,
+              maxWidth: 460,
+              lineHeight: 1.6,
+            }}
+          >
+            {lede}
+          </p>
+        </div>
+
+        <div
+          className="contact-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.3fr)',
+            gap: 'clamp(48px, 6vw, 100px)',
+          }}
+        >
+          <div>
+            <h3
+              className="display"
+              style={{
+                fontSize: 'clamp(32px, 3.5vw, 48px)',
+                color: 'var(--ink)',
+                margin: 0,
+                marginBottom: 40,
+                lineHeight: 1.05,
+                letterSpacing: '-0.01em',
+              }}
+            >
+              {detailsHeading}{' '}
+              <span className="display-italic" style={{ color: 'var(--teal-800)' }}>
+                {detailsHeadingItalic}
+              </span>
+            </h3>
+
             <div style={{ display: 'grid', gap: 32 }}>
-              <div>
-                <div className="eyebrow" style={{ marginBottom: 8 }}>
-                  Houston Office
+              {offices.map((office, idx) => (
+                <div key={idx}>
+                  <div style={{ ...eyebrowStyle, marginBottom: 8 }}>
+                    {s(office?.label, 'Office')}
+                  </div>
+                  <p className="body" style={{ color: 'var(--ink)', margin: 0, marginBottom: 6 }}>
+                    {s(office?.addressLine1, '')}
+                    {office?.addressLine2 ? (
+                      <>
+                        <br />
+                        {office.addressLine2}
+                      </>
+                    ) : null}
+                  </p>
+                  {office?.phone && (
+                    <a
+                      href={`tel:${office.phone.replace(/\s+/g, '')}`}
+                      className="ulink body-sm"
+                      style={{ color: 'var(--ink-2)' }}
+                    >
+                      {office.phone}
+                    </a>
+                  )}
                 </div>
-                <p className="body" style={{ color: 'var(--ink)', margin: 0 }}>
-                  1717 West Loop South, Suite 1800
-                  <br />
-                  Houston, Texas 77027
-                </p>
-              </div>
+              ))}
+
               <div>
-                <div className="eyebrow" style={{ marginBottom: 8 }}>
-                  Phone
-                </div>
-                <p className="body" style={{ color: 'var(--ink)', margin: 0 }}>
-                  +1 (713) 555-0140
-                </p>
-              </div>
-              <div>
-                <div className="eyebrow" style={{ marginBottom: 8 }}>
-                  Email
-                </div>
+                <div style={{ ...eyebrowStyle, marginBottom: 8 }}>Email</div>
                 <a
-                  href="mailto:info@nwtlaw.example"
+                  href={`mailto:${sharedEmail}`}
                   className="ulink body"
                   style={{ color: 'var(--ink)' }}
                 >
-                  info@nwtlaw.example
+                  {sharedEmail}
                 </a>
+              </div>
+
+              <div>
+                <div style={{ ...eyebrowStyle, marginBottom: 8 }}>{hoursLabel}</div>
+                <p className="body" style={{ color: 'var(--ink-2)', margin: 0, whiteSpace: 'pre-line' }}>
+                  {hoursBody}
+                </p>
               </div>
             </div>
           </div>
@@ -168,13 +304,11 @@ export function ContactSection() {
                 background: 'var(--cream-2)',
                 padding: '48px 40px',
                 borderRadius: 4,
+                border: '1px solid var(--line)',
               }}
             >
-              <div
-                className="eyebrow"
-                style={{ color: 'var(--accent)', marginBottom: 16 }}
-              >
-                Message received
+              <div style={{ ...eyebrowStyle, color: 'var(--accent)', marginBottom: 16 }}>
+                {successEyebrow}
               </div>
               <h3
                 style={{
@@ -185,30 +319,18 @@ export function ContactSection() {
                   marginBottom: 16,
                 }}
               >
-                Thank you, {form.name || 'there'}.
+                {successHeading}, {form.name || 'there'}.
               </h3>
-              <p className="body" style={{ color: 'var(--ink-2)', margin: 0 }}>
-                We&apos;ve received your inquiry and will be in touch within one
-                business day.
+              <p className="body" style={{ color: 'var(--ink-2)', margin: 0, lineHeight: 1.6 }}>
+                {successBody}
               </p>
             </div>
           ) : (
             <form onSubmit={onSubmit} style={{ display: 'grid', gap: 28 }}>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: 32,
-                }}
-              >
+              <div className="contact-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
                 <div>
                   <label style={labelStyle}>Name *</label>
-                  <input
-                    style={inputStyle}
-                    value={form.name}
-                    onChange={update('name')}
-                    required
-                  />
+                  <input style={inputStyle} value={form.name} onChange={update('name')} required />
                 </div>
                 <div>
                   <label style={labelStyle}>Email *</label>
@@ -221,28 +343,14 @@ export function ContactSection() {
                   />
                 </div>
               </div>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: 32,
-                }}
-              >
+              <div className="contact-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
                 <div>
                   <label style={labelStyle}>Phone</label>
-                  <input
-                    style={inputStyle}
-                    value={form.phone}
-                    onChange={update('phone')}
-                  />
+                  <input style={inputStyle} value={form.phone} onChange={update('phone')} />
                 </div>
                 <div>
                   <label style={labelStyle}>Company / Firm</label>
-                  <input
-                    style={inputStyle}
-                    value={form.firm}
-                    onChange={update('firm')}
-                  />
+                  <input style={inputStyle} value={form.firm} onChange={update('firm')} />
                 </div>
               </div>
               <div>
@@ -254,10 +362,8 @@ export function ContactSection() {
                   onChange={update('message')}
                 />
               </div>
-              <p className="body-sm" style={{ marginTop: 16 }}>
-                Submitting this form does not create an attorney-client
-                relationship. By contacting us, you acknowledge that we may not
-                represent you until a formal engagement is established.
+              <p className="body-sm" style={{ marginTop: 16, color: 'var(--ink-3)', lineHeight: 1.6 }}>
+                {disclaimer}
               </p>
               <div>
                 <button
@@ -269,7 +375,7 @@ export function ContactSection() {
                     alignItems: 'center',
                   }}
                 >
-                  Send Message
+                  {submitLabel}
                   <ArrowIcon />
                 </button>
               </div>

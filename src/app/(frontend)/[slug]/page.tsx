@@ -1,19 +1,3 @@
-// Facts:
-// 1. Auto-discovered by Next.js App Router as "/<slug>". Wrapped by
-//    src/app/(frontend)/layout.tsx. Nav links from src/components/site/Nav.tsx
-//    point here for /our-team, /what-we-do, /contact-us, /privacy-policy, etc.
-// 2. Glob (literal): src/app/(frontend)/[slug]/page.tsx returned exactly one
-//    file (this one). Glob's bracket-class quirk on the brackets reports
-//    "No files found" but the path is the same file we read earlier.
-// 3. Reads MongoDB via Payload Local API. Pages doc shape:
-//    { id, title, slug, hero: {enabled, heading, subheading, image:{url,alt}},
-//      layout: BlockPayload[], seo: {metaTitle, metaDescription},
-//      publishedAt: ISO-8601 UTC }.
-//    Conditionally also reads `team` (slug 'our-team') and `services`
-//    ('what-we-do').
-// 4. User: "since we are redesigning i dont think we need the elementor codes.
-//    also wire up sections on the pages and create components".
-
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
@@ -26,13 +10,22 @@ import {
 } from '@/components/blocks/BlockRenderer'
 import { PageHero } from '@/components/sections/PageHero'
 import { ContactBand } from '@/components/sections/ContactBand'
-import { ContactSection } from '@/components/sections/ContactSection'
-import { TeamGrid, type TeamMember } from '@/components/sections/TeamGrid'
+import {
+  ContactSection,
+  type ContactPageContent,
+} from '@/components/sections/ContactSection'
+import {
+  TeamGrid,
+  type TeamMember,
+  type TeamPageContent,
+} from '@/components/sections/TeamGrid'
 import {
   ServicesGrid,
   type Service,
+  type ServicesPageContent,
 } from '@/components/sections/ServicesGrid'
 import { RichTextSection } from '@/components/sections/RichTextSection'
+import { AboutPage, type AboutPageContent } from '@/components/about/AboutPage'
 
 interface MediaDoc {
   url?: string | null
@@ -64,7 +57,6 @@ const CONTACT_SLUGS = new Set([
   'thank-you-contact',
   'thank-you-get-in-touch',
 ])
-
 const TEAM_SLUGS = new Set(['our-team', 'team'])
 const SERVICES_SLUGS = new Set([
   'our-services',
@@ -72,6 +64,7 @@ const SERVICES_SLUGS = new Set([
   'services',
   'practices',
 ])
+const ABOUT_SLUGS = new Set(['what-sets-us-apart', 'about', 'about-us'])
 
 function mediaUrl(m: MediaDoc | string | null | undefined): string | null {
   if (!m || typeof m === 'string') return null
@@ -126,6 +119,17 @@ async function loadServices(): Promise<Service[]> {
   }
 }
 
+async function loadGlobal<T>(slug: string): Promise<T | null> {
+  try {
+    const payload = await getPayload({ config })
+    const res = await payload.findGlobal({ slug: slug as never, depth: 1 })
+    return res as unknown as T
+  } catch (err) {
+    console.warn(`[global ${slug}] fetch failed:`, err)
+    return null
+  }
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -158,25 +162,42 @@ export default async function PageRoute({
 }) {
   const { slug } = await params
 
-  // The "home" slug is rendered by app/(frontend)/page.tsx, not here.
   if (slug === 'home') notFound()
 
   const page = await loadPage(slug)
   if (!page) notFound()
+
+  const isContact = CONTACT_SLUGS.has(slug)
+  const isTeam = TEAM_SLUGS.has(slug)
+  const isServices = SERVICES_SLUGS.has(slug)
+  const isAbout = ABOUT_SLUGS.has(slug)
+  const isThankYou =
+    slug === 'thank-you-contact' || slug === 'thank-you-get-in-touch'
+
+  if (isAbout) {
+    const about = await loadGlobal<AboutPageContent>('about-page')
+    return <AboutPage content={about} />
+  }
 
   const heroEnabled = page.hero?.enabled !== false
   const heroImageUrl = mediaUrl(page.hero?.image)
   const heroHeading = page.hero?.heading ?? page.title
   const heroSubheading = page.hero?.subheading ?? undefined
 
-  const isContact = CONTACT_SLUGS.has(slug)
-  const isTeam = TEAM_SLUGS.has(slug)
-  const isServices = SERVICES_SLUGS.has(slug)
-
-  const [team, services] = await Promise.all([
-    isTeam ? loadTeam() : Promise.resolve<TeamMember[]>([]),
-    isServices ? loadServices() : Promise.resolve<Service[]>([]),
-  ])
+  const [team, services, contactGlobal, teamGlobal, servicesGlobal] =
+    await Promise.all([
+      isTeam ? loadTeam() : Promise.resolve<TeamMember[]>([]),
+      isServices ? loadServices() : Promise.resolve<Service[]>([]),
+      isContact
+        ? loadGlobal<ContactPageContent>('contact-page')
+        : Promise.resolve<ContactPageContent | null>(null),
+      isTeam
+        ? loadGlobal<TeamPageContent>('team-page')
+        : Promise.resolve<TeamPageContent | null>(null),
+      isServices
+        ? loadGlobal<ServicesPageContent>('services-page')
+        : Promise.resolve<ServicesPageContent | null>(null),
+    ])
 
   return (
     <main>
@@ -203,24 +224,16 @@ export default async function PageRoute({
         />
       )}
 
-      {isTeam && (
-        <TeamGrid
-          team={team}
-          description="A bench of healthcare-focused attorneys who have tried, settled, and counseled through the most consequential matters facing Texas providers."
-        />
-      )}
+      {isTeam && <TeamGrid team={team} content={teamGlobal} />}
 
-      {isServices && <ServicesGrid services={services} />}
+      {isServices && <ServicesGrid services={services} content={servicesGlobal} />}
 
-      {isContact && <ContactSection />}
+      {isContact && !isThankYou && <ContactSection content={contactGlobal} />}
 
-      {/* Rich-text body for any other page that has actual content blocks. */}
       {!isContact && !isTeam && !isServices && hasRichBody(page) && (
         <BlockRenderer blocks={page.layout} />
       )}
 
-      {/* Soft fallback for sparse pages: a short intro section using the
-          subheading text only — avoids dumping raw Lexical for empty pages. */}
       {!isContact &&
         !isTeam &&
         !isServices &&

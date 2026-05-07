@@ -297,8 +297,39 @@ button {
   [style*="grid-template-columns: 1.3fr"],
   [style*="grid-template-columns: 1.6fr"],
   [style*="grid-template-columns: repeat(3"],
-  [style*="grid-template-columns: repeat(4"] {
+  [style*="grid-template-columns: repeat(4"],
+  [style*="minmax(0, 1fr) minmax(0, 1.1fr)"],
+  [style*="minmax(0, 1.4fr) minmax(0, 1fr)"],
+  [style*="minmax(0, 1.1fr) minmax(0, 0.9fr)"],
+  [style*="minmax(0, 1fr) minmax(0, 0.9fr)"],
+  [style*="minmax(0, 1fr) minmax(0, 1.3fr)"] {
     grid-template-columns: 1fr !important;
+  }
+
+  /* About + Contact + Services row collapses. */
+  .about-hero-grid,
+  .about-story-grid,
+  .about-pillars-grid,
+  .contact-header,
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+  .about-pillars-grid {
+    gap: 56px !important;
+  }
+  .about-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 32px !important;
+  }
+  .contact-row {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  /* Services list row stacks: number + title, summary slides under. */
+  .services-row {
+    grid-template-columns: 60px 1fr !important;
+    gap: 16px !important;
   }
 }
 
