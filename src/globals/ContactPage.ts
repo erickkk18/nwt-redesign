@@ -41,9 +41,15 @@ export const ContactPage: GlobalConfig = {
           defaultValue: [
             {
               label: 'Houston Office',
-              addressLine1: '1717 West Loop South, Suite 1800',
-              addressLine2: 'Houston, Texas 77027',
-              phone: '+1 (713) 555-0140',
+              addressLine1: '2402 Dunlavy Street, Suite 2000',
+              addressLine2: 'Houston, Texas 77006',
+              phone: '713-405-7090',
+            },
+            {
+              label: 'Austin Office',
+              addressLine1: '2901 Bee Caves Road, Suite A',
+              addressLine2: 'Austin, Texas 78746',
+              phone: '512-221-3057',
             },
           ],
           fields: [
@@ -53,12 +59,12 @@ export const ContactPage: GlobalConfig = {
             { name: 'phone', type: 'text' },
           ],
         },
-        { name: 'sharedEmail', type: 'text', defaultValue: 'info@nwtlaw.example' },
+        { name: 'sharedEmail', type: 'text', defaultValue: 'firm@nwt.local' },
         { name: 'hoursLabel', type: 'text', defaultValue: 'Hours' },
         {
           name: 'hoursBody',
           type: 'textarea',
-          defaultValue: 'Mon — Fri · 8:30 AM – 6:00 PM CT',
+          defaultValue: 'Monday – Friday · 9:00 AM – 6:00 PM',
         },
       ],
     },

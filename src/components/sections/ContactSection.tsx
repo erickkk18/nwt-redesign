@@ -148,14 +148,20 @@ export function ContactSection({ content }: ContactSectionProps = {}) {
       : [
           {
             label: 'Houston Office',
-            addressLine1: '1717 West Loop South, Suite 1800',
-            addressLine2: 'Houston, Texas 77027',
-            phone: '+1 (713) 555-0140',
+            addressLine1: '2402 Dunlavy Street, Suite 2000',
+            addressLine2: 'Houston, Texas 77006',
+            phone: '713-405-7090',
+          },
+          {
+            label: 'Austin Office',
+            addressLine1: '2901 Bee Caves Road, Suite A',
+            addressLine2: 'Austin, Texas 78746',
+            phone: '512-221-3057',
           },
         ]
-  const sharedEmail = s(content?.details?.sharedEmail, 'info@nwtlaw.example')
+  const sharedEmail = s(content?.details?.sharedEmail, 'firm@nwt.local')
   const hoursLabel = s(content?.details?.hoursLabel, 'Hours')
-  const hoursBody = s(content?.details?.hoursBody, 'Mon — Fri · 8:30 AM – 6:00 PM CT')
+  const hoursBody = s(content?.details?.hoursBody, 'Monday – Friday · 9:00 AM – 6:00 PM')
 
   const submitLabel = s(content?.form?.submitLabel, 'Send Message')
   const disclaimer = s(

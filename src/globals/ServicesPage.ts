@@ -14,14 +14,14 @@ export const ServicesPage: GlobalConfig = {
       label: '01 · Intro',
       fields: [
         { name: 'eyebrowNumber', type: 'text', defaultValue: '04' },
-        { name: 'eyebrowText', type: 'text', defaultValue: 'Practice Areas' },
-        { name: 'heading', type: 'text', defaultValue: 'What We' },
-        { name: 'headingItalic', type: 'text', defaultValue: 'Do.' },
+        { name: 'eyebrowText', type: 'text', defaultValue: 'Excellence in Customer Service' },
+        { name: 'heading', type: 'text', defaultValue: 'Full-Service' },
+        { name: 'headingItalic', type: 'text', defaultValue: 'Law Firm.' },
         {
           name: 'description',
           type: 'textarea',
           defaultValue:
-            'Concentrated practice areas, deep healthcare fluency, and counsel calibrated to the stakes. Pick a practice to see how we work in it.',
+            'We are a full-service law firm with the depth and experience to handle almost any transactional, litigation, corporate, or compliance matter in a variety of fields. Our team has particular expertise in the highly regulated healthcare industry. We offer our clients an exceptional team, dedicated to the delivery of outstanding service — always with the personalized and responsive touch of a small law firm.',
         },
       ],
     },
@@ -31,20 +31,20 @@ export const ServicesPage: GlobalConfig = {
       label: '02 · Closing CTA',
       fields: [
         { name: 'enabled', type: 'checkbox', defaultValue: true },
-        { name: 'eyebrowText', type: 'text', defaultValue: 'Engage Us' },
-        { name: 'heading', type: 'text', defaultValue: "Don't see your" },
-        { name: 'headingItalic', type: 'text', defaultValue: 'matter?' },
+        { name: 'eyebrowText', type: 'text', defaultValue: 'Why Our Firm' },
+        { name: 'heading', type: 'text', defaultValue: 'We provide the highest quality counsel' },
+        { name: 'headingItalic', type: 'text', defaultValue: 'for your business.' },
         {
           name: 'body',
           type: 'textarea',
           defaultValue:
-            "We take on adjacent and bespoke matters when they sit in our wheelhouse. The fastest answer is a 15-minute call.",
+            'Our team has particular expertise in the highly regulated healthcare industry. We offer our clients an exceptional team, dedicated to the delivery of outstanding service — always with the personalized and responsive touch of a small law firm.',
         },
         {
           name: 'primaryCta',
           type: 'group',
           fields: [
-            { name: 'label', type: 'text', defaultValue: 'Talk to a Partner' },
+            { name: 'label', type: 'text', defaultValue: 'Contact Us' },
             { name: 'href', type: 'text', defaultValue: '/contact-us' },
           ],
         },

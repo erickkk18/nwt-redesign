@@ -1,5 +1,7 @@
 import type { CSSProperties } from 'react'
 
+import { HeroTheme } from '@/components/site/HeroTheme'
+
 interface PayloadMedia {
   id?: string
   url?: string | null
@@ -20,11 +22,6 @@ interface AboutHeroContent {
   image?: PayloadMedia | string | null
 }
 
-interface AboutQuoteContent {
-  body?: string | null
-  attribution?: string | null
-}
-
 interface AboutPillarItem {
   numLabel?: string | null
   title?: string | null
@@ -39,27 +36,19 @@ interface AboutPillarsContent {
   items?: AboutPillarItem[] | null
 }
 
-interface AboutStoryContent {
+interface AboutLicenseItem {
+  jurisdiction?: string | null
+  body?: string | null
+}
+
+interface AboutLicensesContent {
   eyebrowNumber?: string | null
   eyebrowText?: string | null
   heading?: string | null
   headingItalic?: string | null
-  body1?: string | null
-  body2?: string | null
-  image?: PayloadMedia | string | null
-  imageCaption?: string | null
-}
-
-interface AboutStatItem {
-  value?: string | null
-  suffix?: string | null
-  label?: string | null
-}
-
-interface AboutStatsContent {
-  eyebrowNumber?: string | null
-  eyebrowText?: string | null
-  items?: AboutStatItem[] | null
+  disclaimer?: string | null
+  items?: AboutLicenseItem[] | null
+  cta?: CtaContent | null
 }
 
 interface AboutCtaContent {
@@ -72,10 +61,8 @@ interface AboutCtaContent {
 
 export interface AboutPageContent {
   hero?: AboutHeroContent | null
-  quote?: AboutQuoteContent | null
   pillars?: AboutPillarsContent | null
-  story?: AboutStoryContent | null
-  stats?: AboutStatsContent | null
+  licenses?: AboutLicensesContent | null
   cta?: AboutCtaContent | null
 }
 
@@ -110,23 +97,24 @@ const eyebrowStyle: CSSProperties = {
 
 function AboutHero({ content }: { content?: AboutHeroContent | null }) {
   const eyebrowNumber = s(content?.eyebrowNumber, '02')
-  const eyebrowText = s(content?.eyebrowText, 'About')
-  const headline = s(content?.headline, 'What Sets')
-  const headlineItalic = s(content?.headlineItalic, 'Us Apart.')
+  const eyebrowText = s(content?.eyebrowText, 'What We Do')
+  const headline = s(content?.headline, 'All the Experience of a')
+  const headlineItalic = s(content?.headlineItalic, 'Big Law Firm Without the Waste.')
   const lede = s(
     content?.lede,
-    'A boutique law firm built around three quiet convictions: clients deserve real attention, complex matters reward focused experience, and the right room is the one where decisions get made.',
+    "Before you hire that giant international firm, give us a call. Big Law has its place, but it's not every place. Our lawyers have BigLaw pedigrees — all the high-profile experience and elite-level skills, because that's where they came from. Combined, our team has 130+ years representing the nation's largest, most demanding clients on transactions and litigation involving billions of dollars.",
   )
   const imgUrl = mediaUrl(content?.image)
-  const imgAlt = mediaAlt(content?.image, 'Nichols Weitzner partners')
+  const imgAlt = mediaAlt(content?.image, 'Nichols Weitzner Thomas')
 
   return (
     <section
       style={{
         background: 'var(--paper)',
-        padding: 'clamp(80px, 14vh, 160px) 0 clamp(80px, 12vh, 140px)',
+        padding: 'clamp(140px, 18vh, 200px) 0 clamp(80px, 12vh, 140px)',
         position: 'relative',
         overflow: 'hidden',
+        borderBottom: '1px solid var(--line)',
       }}
     >
       <div className="container-wide">
@@ -147,15 +135,14 @@ function AboutHero({ content }: { content?: AboutHeroContent | null }) {
             <h1
               className="display"
               style={{
-                fontSize: 'clamp(56px, 9vw, 144px)',
-                lineHeight: 0.92,
+                fontSize: 'clamp(48px, 7vw, 112px)',
+                lineHeight: 0.96,
                 letterSpacing: '-0.03em',
                 margin: 0,
                 color: 'var(--ink)',
               }}
             >
-              {headline}
-              <br />
+              {headline}{' '}
               <span className="display-italic" style={{ color: 'var(--teal-800)' }}>
                 {headlineItalic}
               </span>
@@ -164,10 +151,10 @@ function AboutHero({ content }: { content?: AboutHeroContent | null }) {
               className="body-lg"
               style={{
                 marginTop: 40,
-                maxWidth: 560,
+                maxWidth: 620,
                 color: 'var(--ink-2)',
-                fontSize: 'clamp(18px, 1.4vw, 22px)',
-                lineHeight: 1.55,
+                fontSize: 'clamp(17px, 1.3vw, 20px)',
+                lineHeight: 1.65,
               }}
             >
               {lede}
@@ -180,8 +167,7 @@ function AboutHero({ content }: { content?: AboutHeroContent | null }) {
               background: 'var(--cream-2)',
               position: 'relative',
               overflow: 'hidden',
-              boxShadow:
-                '0 30px 60px -30px rgba(0,0,0,0.25), 0 1px 0 rgba(0,0,0,0.04)',
+              boxShadow: '0 30px 60px -30px rgba(0,0,0,0.25), 0 1px 0 rgba(0,0,0,0.04)',
             }}
           >
             {imgUrl ? (
@@ -211,74 +197,8 @@ function AboutHero({ content }: { content?: AboutHeroContent | null }) {
                 mixBlendMode: 'difference',
               }}
             >
-              Houston · 2007
+              130+ Years of BigLaw Pedigree
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function AboutQuote({ content }: { content?: AboutQuoteContent | null }) {
-  const body = s(
-    content?.body,
-    'We built Nichols Weitzner to be the firm we wanted to hire — fast on the work, slow on the relationship.',
-  )
-  const attribution = s(content?.attribution, 'Founding Partners')
-
-  return (
-    <section
-      style={{
-        background: 'var(--cream-2)',
-        padding: 'clamp(80px, 12vh, 140px) 0',
-        position: 'relative',
-      }}
-    >
-      <div className="container">
-        <div style={{ maxWidth: 960, margin: '0 auto', textAlign: 'center', position: 'relative' }}>
-          <span
-            aria-hidden
-            style={{
-              fontFamily: 'var(--serif)',
-              fontStyle: 'italic',
-              fontSize: 'clamp(120px, 16vw, 220px)',
-              lineHeight: 0.6,
-              color: 'var(--teal-800)',
-              opacity: 0.18,
-              position: 'absolute',
-              top: -28,
-              left: -8,
-              userSelect: 'none',
-            }}
-          >
-            “
-          </span>
-          <p
-            className="display"
-            style={{
-              fontFamily: 'var(--serif)',
-              fontSize: 'clamp(28px, 3.6vw, 56px)',
-              lineHeight: 1.2,
-              letterSpacing: '-0.01em',
-              fontWeight: 300,
-              color: 'var(--ink)',
-              margin: 0,
-              position: 'relative',
-            }}
-          >
-            {body}
-          </p>
-          <div
-            style={{
-              marginTop: 40,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 16,
-            }}
-          >
-            <span style={{ width: 48, height: 1, background: 'var(--ink-3)', display: 'inline-block' }} />
-            <span style={eyebrowStyle}>{attribution}</span>
           </div>
         </div>
       </div>
@@ -288,20 +208,23 @@ function AboutQuote({ content }: { content?: AboutQuoteContent | null }) {
 
 function AboutPillars({ content }: { content?: AboutPillarsContent | null }) {
   const eyebrowNumber = s(content?.eyebrowNumber, '03')
-  const eyebrowText = s(content?.eyebrowText, 'Pillars')
-  const heading = s(content?.heading, 'Three Things')
-  const headingItalic = s(content?.headingItalic, 'We Refuse to Compromise.')
+  const eyebrowText = s(content?.eyebrowText, 'How We Work')
+  const heading = s(content?.heading, 'Personable.')
+  const headingItalic = s(content?.headingItalic, 'Creative. Efficient.')
   const items =
     content?.items && content.items.length > 0
       ? content.items
       : [
-          { numLabel: '01', title: 'Senior-Led Service', body: 'Every matter is staffed by partners and senior counsel — never delegated to a churning bullpen of associates billing for training.' },
-          { numLabel: '02', title: 'Healthcare Native', body: 'We have spent careers inside hospital systems, payor disputes, and provider transactions. Industry fluency is the floor, not the ceiling.' },
-          { numLabel: '03', title: 'Plain-Spoken Counsel', body: 'Real clarity beats legal hedging. We tell you what we would do if it were our company — then we go do it.' },
+          { numLabel: '01', title: 'Personable', body: '' },
+          { numLabel: '02', title: 'Creative', body: '' },
+          { numLabel: '03', title: 'Efficient', body: '' },
         ]
 
   return (
-    <section id="pillars" style={{ background: 'var(--paper)', padding: 'clamp(80px, 12vh, 140px) 0' }}>
+    <section
+      id="pillars"
+      style={{ background: 'var(--paper)', padding: 'clamp(80px, 12vh, 140px) 0' }}
+    >
       <div className="container-wide">
         <div
           style={{
@@ -367,18 +290,18 @@ function AboutPillars({ content }: { content?: AboutPillarsContent | null }) {
               <h3
                 style={{
                   fontFamily: 'var(--serif)',
-                  fontSize: 'clamp(22px, 1.9vw, 30px)',
+                  fontSize: 'clamp(24px, 2.2vw, 36px)',
                   fontWeight: 400,
                   lineHeight: 1.2,
                   letterSpacing: '-0.01em',
                   margin: 0,
-                  marginBottom: 16,
+                  marginBottom: 20,
                   color: 'var(--ink)',
                 }}
               >
                 {s(pillar.title, '—')}
               </h3>
-              <p className="body" style={{ color: 'var(--ink-2)', margin: 0, lineHeight: 1.6 }}>
+              <p className="body" style={{ color: 'var(--ink-2)', margin: 0, lineHeight: 1.65 }}>
                 {s(pillar.body, '')}
               </p>
             </article>
@@ -389,54 +312,57 @@ function AboutPillars({ content }: { content?: AboutPillarsContent | null }) {
   )
 }
 
-function AboutStory({ content }: { content?: AboutStoryContent | null }) {
+function AboutLicenses({ content }: { content?: AboutLicensesContent | null }) {
   const eyebrowNumber = s(content?.eyebrowNumber, '04')
-  const eyebrowText = s(content?.eyebrowText, 'Origin')
-  const heading = s(content?.heading, 'Built by lawyers who')
-  const headingItalic = s(content?.headingItalic, 'left big law on purpose.')
-  const body1 = s(
-    content?.body1,
-    'Nichols Weitzner began with a deliberate departure. Our founders left top-tier firms after watching too many sophisticated clients buried under the weight of process, conflicts, and committee.',
+  const eyebrowText = s(content?.eyebrowText, 'State Bar Qualification')
+  const heading = s(content?.heading, 'Our')
+  const headingItalic = s(content?.headingItalic, 'Licenses.')
+  const disclaimer = s(
+    content?.disclaimer,
+    'Unless otherwise noted, our lawyers are not certified by the Texas Board of Legal Specialization.',
   )
-  const body2 = s(
-    content?.body2,
-    'The result is a practice deliberately scaled to the work — large enough to handle bet-the-company litigation and complex transactions, small enough to know your business by heart.',
-  )
-  const imgUrl = mediaUrl(content?.image)
-  const imgAlt = mediaAlt(content?.image, 'Firm history')
-  const imageCaption = s(content?.imageCaption, 'Houston · 2007 → Today')
+  const items =
+    content?.items && content.items.length > 0
+      ? content.items
+      : [
+          { jurisdiction: 'Texas', body: 'All of our attorneys are licensed in Texas.' },
+          { jurisdiction: 'California', body: 'Scott Nichols and Zach Thomas are licensed in California.' },
+          { jurisdiction: 'Other States', body: 'Zach Thomas is also licensed in Illinois, Missouri, and Oregon.' },
+        ]
+  const ctaLabel = s(content?.cta?.label, 'View Our Team')
+  const ctaHref = s(content?.cta?.href, '/our-team')
 
   return (
     <section
       style={{
-        background: 'var(--paper)',
-        padding: 'clamp(60px, 10vh, 120px) 0',
+        background: 'var(--cream-2)',
+        padding: 'clamp(80px, 12vh, 140px) 0',
         borderTop: '1px solid var(--line)',
       }}
     >
       <div className="container-wide">
         <div
-          className="about-story-grid"
+          className="about-licenses-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.1fr)',
+            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.4fr)',
             gap: 'clamp(40px, 6vw, 96px)',
-            alignItems: 'center',
+            alignItems: 'start',
           }}
         >
           <div>
-            <div style={{ ...eyebrowStyle, marginBottom: 24 }}>
+            <div style={{ ...eyebrowStyle, marginBottom: 16 }}>
               <span style={{ color: 'var(--accent)', marginRight: 10 }}>{eyebrowNumber}</span>
               {eyebrowText}
             </div>
             <h2
               className="display"
               style={{
-                fontSize: 'clamp(36px, 4.4vw, 64px)',
-                lineHeight: 1.0,
+                fontSize: 'clamp(40px, 5vw, 72px)',
+                lineHeight: 0.98,
                 letterSpacing: '-0.02em',
                 margin: 0,
-                marginBottom: 32,
+                marginBottom: 24,
               }}
             >
               {heading}{' '}
@@ -444,125 +370,64 @@ function AboutStory({ content }: { content?: AboutStoryContent | null }) {
                 {headingItalic}
               </span>
             </h2>
-            <p className="body-lg" style={{ color: 'var(--ink-2)', lineHeight: 1.65, marginBottom: 20 }}>
-              {body1}
+            <p className="body-sm" style={{ color: 'var(--ink-3)', lineHeight: 1.6, marginBottom: 32 }}>
+              {disclaimer}
             </p>
-            <p className="body-lg" style={{ color: 'var(--ink-2)', lineHeight: 1.65, margin: 0 }}>
-              {body2}
-            </p>
+            <a
+              href={ctaHref}
+              className="ulink body"
+              style={{ color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 8 }}
+            >
+              {ctaLabel}
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </a>
           </div>
 
-          <figure style={{ margin: 0 }}>
-            <div
-              style={{
-                aspectRatio: '5/4',
-                background: 'var(--cream-2)',
-                overflow: 'hidden',
-                position: 'relative',
-              }}
-            >
-              {imgUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={imgUrl}
-                  alt={imgAlt}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-              ) : (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    background:
-                      'repeating-linear-gradient(45deg, var(--cream-2) 0 16px, rgba(0,0,0,0.05) 16px 32px)',
-                  }}
-                />
-              )}
-            </div>
-            <figcaption
-              style={{ ...eyebrowStyle, marginTop: 16, display: 'flex', alignItems: 'center', gap: 12 }}
-            >
-              <span style={{ width: 24, height: 1, background: 'var(--ink-3)', display: 'inline-block' }} />
-              {imageCaption}
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function AboutStats({ content }: { content?: AboutStatsContent | null }) {
-  const eyebrowNumber = s(content?.eyebrowNumber, '05')
-  const eyebrowText = s(content?.eyebrowText, 'By the Numbers')
-  const items =
-    content?.items && content.items.length > 0
-      ? content.items
-      : [
-          { value: '19', suffix: 'Years', label: 'Continuous Texas practice' },
-          { value: '$2B+', suffix: '', label: 'In matters handled to verdict or close' },
-          { value: '40+', suffix: '', label: 'Healthcare systems served' },
-          { value: '3', suffix: 'Cities', label: 'Houston · Austin · Dallas' },
-        ]
-
-  return (
-    <section
-      style={{
-        background: 'var(--teal-900, #08312f)',
-        color: 'var(--paper)',
-        padding: 'clamp(80px, 12vh, 140px) 0',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      <div className="container-wide">
-        <div style={{ marginBottom: 64 }}>
-          <div style={{ ...eyebrowStyle, color: 'rgba(255,255,255,0.6)' }}>
-            <span style={{ color: 'var(--accent)', marginRight: 10 }}>{eyebrowNumber}</span>
-            {eyebrowText}
-          </div>
-        </div>
-
-        <div
-          className="about-stats-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: `repeat(${Math.min(items.length, 4)}, 1fr)`,
-            gap: 'clamp(28px, 3vw, 56px)',
-          }}
-        >
-          {items.map((stat, idx) => (
-            <div
-              key={idx}
-              style={{ paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.18)' }}
-            >
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 12 }}>
-                <span
-                  className="display-italic"
+          <div style={{ display: 'grid', gap: 0 }}>
+            {items.map((lic, idx) => (
+              <div
+                key={idx}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(0, 220px) minmax(0, 1fr)',
+                  gap: 'clamp(16px, 3vw, 48px)',
+                  padding: '28px 0',
+                  borderTop: '1px solid var(--line)',
+                  borderBottom: idx === items.length - 1 ? '1px solid var(--line)' : 'none',
+                  alignItems: 'baseline',
+                }}
+              >
+                <h3
                   style={{
                     fontFamily: 'var(--serif)',
                     fontStyle: 'italic',
-                    fontSize: 'clamp(56px, 6vw, 96px)',
-                    lineHeight: 0.95,
-                    fontWeight: 300,
-                    letterSpacing: '-0.02em',
-                    color: 'var(--paper)',
+                    fontSize: 'clamp(22px, 2vw, 30px)',
+                    fontWeight: 400,
+                    lineHeight: 1.2,
+                    color: 'var(--teal-800)',
+                    margin: 0,
                   }}
                 >
-                  {s(stat.value, '—')}
-                </span>
-                {stat.suffix && (
-                  <span style={{ ...eyebrowStyle, color: 'rgba(255,255,255,0.55)' }}>{stat.suffix}</span>
-                )}
+                  {s(lic.jurisdiction, '—')}
+                </h3>
+                <p className="body" style={{ color: 'var(--ink-2)', margin: 0, lineHeight: 1.6 }}>
+                  {s(lic.body, '')}
+                </p>
               </div>
-              <p
-                className="body-sm"
-                style={{ color: 'rgba(255,255,255,0.7)', margin: 0, lineHeight: 1.5 }}
-              >
-                {s(stat.label, '')}
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -571,43 +436,63 @@ function AboutStats({ content }: { content?: AboutStatsContent | null }) {
 
 function AboutCta({ content }: { content?: AboutCtaContent | null }) {
   const eyebrowText = s(content?.eyebrowText, 'Get in Touch')
-  const headline = s(content?.headline, "Let's see if we")
-  const headlineItalic = s(content?.headlineItalic, 'fit your matter.')
+  const headline = s(content?.headline, 'We bring proven experience')
+  const headlineItalic = s(content?.headlineItalic, 'with personalized counsel.')
   const body = s(
     content?.body,
-    'A 30-minute conversation tells us both whether the chemistry — and the case — make sense. No engagement, no obligation.',
+    'Complex healthcare regulations require counsel who understands both the law and the operational pressures behind it. Tell us about your matter — a partner will respond within one business day.',
   )
-  const ctaLabel = s(content?.primaryCta?.label, 'Book a Conversation')
+  const ctaLabel = s(content?.primaryCta?.label, 'Contact Us')
   const ctaHref = s(content?.primaryCta?.href, '/contact-us')
 
   return (
-    <section style={{ background: 'var(--paper)', padding: 'clamp(80px, 14vh, 160px) 0', position: 'relative' }}>
+    <section
+      style={{
+        background: 'var(--teal-900, #08312f)',
+        color: 'var(--paper)',
+        padding: 'clamp(80px, 14vh, 160px) 0',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
       <div className="container">
         <div style={{ maxWidth: 880, margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ ...eyebrowStyle, marginBottom: 32 }}>{eyebrowText}</div>
+          <div style={{ ...eyebrowStyle, marginBottom: 32, color: 'rgba(255,255,255,0.6)' }}>
+            {eyebrowText}
+          </div>
           <h2
             className="display"
             style={{
-              fontSize: 'clamp(44px, 6vw, 96px)',
-              lineHeight: 0.98,
+              fontSize: 'clamp(40px, 5.5vw, 88px)',
+              lineHeight: 1.0,
               letterSpacing: '-0.02em',
               margin: 0,
-              color: 'var(--ink)',
+              color: 'var(--paper)',
             }}
           >
             {headline}{' '}
-            <span className="display-italic" style={{ color: 'var(--teal-800)' }}>
+            <span className="display-italic" style={{ color: 'var(--accent)' }}>
               {headlineItalic}
             </span>
           </h2>
-          <p className="body-lg" style={{ marginTop: 32, color: 'var(--ink-2)', lineHeight: 1.6 }}>
+          <p
+            className="body-lg"
+            style={{ marginTop: 32, color: 'rgba(255,255,255,0.78)', lineHeight: 1.65 }}
+          >
             {body}
           </p>
           <div style={{ marginTop: 48 }}>
             <a
               href={ctaHref}
-              className="btn btn-primary"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '18px 36px' }}
+              className="btn"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 10,
+                padding: '18px 36px',
+                background: 'var(--paper)',
+                color: 'var(--ink)',
+              }}
             >
               {ctaLabel}
               <svg
@@ -634,11 +519,10 @@ function AboutCta({ content }: { content?: AboutCtaContent | null }) {
 export function AboutPage({ content }: AboutPageProps) {
   return (
     <main>
+      <HeroTheme value="light" />
       <AboutHero content={content?.hero} />
-      <AboutQuote content={content?.quote} />
       <AboutPillars content={content?.pillars} />
-      <AboutStory content={content?.story} />
-      <AboutStats content={content?.stats} />
+      <AboutLicenses content={content?.licenses} />
       <AboutCta content={content?.cta} />
     </main>
   )

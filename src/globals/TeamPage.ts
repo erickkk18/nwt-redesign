@@ -14,14 +14,14 @@ export const TeamPage: GlobalConfig = {
       label: '01 · Intro',
       fields: [
         { name: 'eyebrowNumber', type: 'text', defaultValue: '06' },
-        { name: 'eyebrowText', type: 'text', defaultValue: 'The Team' },
-        { name: 'heading', type: 'text', defaultValue: 'Our' },
-        { name: 'headingItalic', type: 'text', defaultValue: 'Attorneys.' },
+        { name: 'eyebrowText', type: 'text', defaultValue: 'Our Team' },
+        { name: 'heading', type: 'text', defaultValue: 'Founded By Veterans of' },
+        { name: 'headingItalic', type: 'text', defaultValue: 'Big Law Firms.' },
         {
           name: 'description',
           type: 'textarea',
           defaultValue:
-            'A bench of healthcare-focused attorneys who have tried, settled, and counseled through the most consequential matters facing Texas providers.',
+            'We bring proven experience with personalized counsel to complex healthcare regulations. Partners and senior counsel staff every matter — never delegated to a churning bullpen.',
         },
       ],
     },

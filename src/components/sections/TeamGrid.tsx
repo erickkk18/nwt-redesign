@@ -223,12 +223,12 @@ function TeamCta({ content }: { content?: TeamCtaContent | null }) {
 
 export function TeamGrid({ team, content }: TeamGridProps) {
   const eyebrowNumber = s(content?.intro?.eyebrowNumber, '06')
-  const eyebrowText = s(content?.intro?.eyebrowText, 'The Team')
-  const heading = s(content?.intro?.heading, 'Our')
-  const headingItalic = s(content?.intro?.headingItalic, 'Attorneys.')
+  const eyebrowText = s(content?.intro?.eyebrowText, 'Our Team')
+  const heading = s(content?.intro?.heading, 'Founded By Veterans of')
+  const headingItalic = s(content?.intro?.headingItalic, 'Big Law Firms.')
   const description = s(
     content?.intro?.description,
-    'A bench of healthcare-focused attorneys who have tried, settled, and counseled through the most consequential matters facing Texas providers.',
+    'We bring proven experience with personalized counsel to complex healthcare regulations. Partners and senior counsel staff every matter — never delegated to a churning bullpen.',
   )
 
   return (

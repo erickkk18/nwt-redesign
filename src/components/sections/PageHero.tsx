@@ -1,9 +1,4 @@
-// Facts:
-// 1. Imported by [slug]/page.tsx, posts/page.tsx, posts/[slug]/page.tsx,
-//    team/[slug]/page.tsx, services/[slug]/page.tsx. Replaces inline hero JSX.
-// 2. Glob: src/components/sections/PageHero.tsx returned No files found.
-// 3. No I/O. Server component.
-// 4. User: "wire up sections on the pages and create components".
+import { HeroTheme } from '@/components/site/HeroTheme'
 
 interface PageHeroProps {
   eyebrow?: string
@@ -45,6 +40,7 @@ export function PageHero({
         borderBottom: isDark ? 'none' : '1px solid var(--line)',
       }}
     >
+      <HeroTheme value={isDark ? 'dark' : 'light'} />
       {imageUrl && isDark && (
         // eslint-disable-next-line @next/next/no-img-element
         <img

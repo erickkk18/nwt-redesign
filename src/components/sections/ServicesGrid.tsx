@@ -218,12 +218,12 @@ function ServicesCta({ content }: { content?: ServicesCtaContent | null }) {
 
 export function ServicesGrid({ services, content }: ServicesGridProps) {
   const eyebrowNumber = s(content?.intro?.eyebrowNumber, '04')
-  const eyebrowText = s(content?.intro?.eyebrowText, 'Practice Areas')
-  const heading = s(content?.intro?.heading, 'What We')
-  const headingItalic = s(content?.intro?.headingItalic, 'Do.')
+  const eyebrowText = s(content?.intro?.eyebrowText, 'Excellence in Customer Service')
+  const heading = s(content?.intro?.heading, 'Full-Service')
+  const headingItalic = s(content?.intro?.headingItalic, 'Law Firm.')
   const description = s(
     content?.intro?.description,
-    'Concentrated practice areas, deep healthcare fluency, and counsel calibrated to the stakes. Pick a practice to see how we work in it.',
+    'We are a full-service law firm with the depth and experience to handle almost any transactional, litigation, corporate, or compliance matter in a variety of fields. Our team has particular expertise in the highly regulated healthcare industry. We offer our clients an exceptional team, dedicated to the delivery of outstanding service — always with the personalized and responsive touch of a small law firm.',
   )
 
   return (
